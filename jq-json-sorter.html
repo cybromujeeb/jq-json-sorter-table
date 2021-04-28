@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>HTML TABLE JSON SORTER</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+<style>
+table {
+    margin: 100px;
+}
+table th {
+    font-weight: bold;
+    cursor: pointer;
+}
+table th, table td {
+    padding: 3px;
+    border: 1px solid #000;
+}
+</style>
+
+<table>
+    <thead id="headings">
+        <tr>
+            <th data-attr="course">course</th>
+            <th data-attr="events">events</th>
+            <th data-attr="registration_cancel">Age</th>
+        </tr>
+    </thead>
+    <tbody id="results">
+        <!-- this will be auto-populated -->
+    </tbody>
+</table>
+
+<script>
+
+var arr = [
+            {
+               course: "A ",
+               events: "3",
+               registration_cancel: 2,
+               registrations: "1",
+            },
+            {
+               course: "B ",
+               events: "1",
+               registration_cancel: 0,
+               registrations: "1",
+            },
+            {
+               course: "C ",
+               events: "2",
+               registration_cancel: 1,
+               registrations: "1",
+            }
+         ];
+
+$(function() {
+    $('#headings th').on('click', function() {
+        var attr = $(this).attr('data-attr');
+        var asc = (!$(this).attr('data-asc')); // switch the order, true if not set
+        
+        // clear any previous sort order indicators
+        $('#headings th').each(function() {
+            $(this).removeAttr('data-asc');
+        });
+        // set sort order indicator
+        if (asc) {
+            $(this).attr('data-asc', 'asc');
+        }
+
+        sortResults(attr, asc);
+    });
+        
+    renderResults();
+});
+
+function sortResults(prop, asc) {
+    arr.sort(function(a, b) {
+        if (asc) {
+            return (a[prop] > b[prop]) ? 1 : ((a[prop] < b[prop]) ? -1 : 0);
+        } else {
+            return (b[prop] > a[prop]) ? 1 : ((b[prop] < a[prop]) ? -1 : 0);
+        }
+    });
+    renderResults();
+}
+
+function renderResults () {
+    var html = '';
+    for (var e in arr) {
+        html += '<tr>'
+            +'<td>'+arr[e].course+'</td>'
+            +'<td>'+arr[e].events+'</td>'
+            +'<td>'+arr[e].registration_cancel+'</td>'
+        +'</tr>';
+    }
+    $('#results').html(html);
+}
+</script>
+
+</body>
+
+</html>
